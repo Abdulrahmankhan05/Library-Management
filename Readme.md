@@ -1,9 +1,9 @@
 
-##Project Title
+## Project Title
 
 Library Management System
 
-##Description
+## Description
 
 A basic Java project that manages library operations.
 Current functionality includes handling membership information.
@@ -13,11 +13,11 @@ Add and store membership details
 
 
 
-##Tech Stack
+## Tech Stack
 
 Java
 
-##Project Structure
+## Project Structure
 ```
 src/
 ├─ Main.java
@@ -25,11 +25,11 @@ src/
 └─ Membership.java
 ```
 
-##Current Progress
+## Current Progress
 
 Membership base abstraction implemented
 
-##Future Work
+## Future Work
 
 Book management
 
