@@ -2,7 +2,7 @@ package model;
 
 public class BasicMembership extends Membership{
     @Override
-    public int getBorrowlimit(){
+    public int getBorrowLimit(){
         return 2;
     }
 
