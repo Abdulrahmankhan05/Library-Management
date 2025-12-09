@@ -3,9 +3,9 @@ package model;
 public class Member {
     private String id;
     private String name;
-    private String membership;
+    private Membership membership;
 
-    public Member(String id,String name, String membership){
+    public Member(String id,String name, Membership membership){
         this.id= id;
         this.name=name;
         this.membership=membership;
@@ -15,7 +15,7 @@ public class Member {
         return id;
     }
 
-    public String getMembership() {
+    public Membership getMembership() {
         return membership;
     }
 
