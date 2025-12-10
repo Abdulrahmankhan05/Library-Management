@@ -10,12 +10,12 @@ import java.util.List;
 public class Library {
     private final List<Member> members;
     private final List<Book> books;
-    private final List<BorrowRecord> borrowedbooks;
+    private final List<BorrowRecord> borrowedBooks;
 
     public Library(){
         this.members=new ArrayList<>();
         this.books= new ArrayList<>();
-        this.borrowedbooks= new ArrayList<>();
+        this.borrowedBooks= new ArrayList<>();
 
     }
     public void addBook(Book book){
@@ -26,14 +26,14 @@ public class Library {
     public void addMember(Member member){
         members.add(member);
     }
-    public boolean borrowBook(String memberid,String bookid){
-        Member member= findMemberByid(memberid);
+    public boolean borrowBook(String memberId,String bookId){
+        Member member= findMemberById(memberId);
         if(member==null){
             System.out.println("Member not found");
             return false;
         }
 
-        Book book=findBookByid(bookid);
+        Book book=findBookById(bookId);
         if(book==null){
             System.out.println("Book not found");
             return false;
@@ -42,61 +42,61 @@ public class Library {
             System.out.println("Book is already borrowed");
             return false;
         }
-        int curentborrowedbook= countBorrowedBookByMember(member);
+        int currentBorrowedBook= countBorrowedBookByMember(member);
         int limit=member.getMembership().getBorrowLimit();
-        if(curentborrowedbook>=limit){
+        if(currentBorrowedBook>=limit){
             System.out.println(" This Member reached the limit of borrowing");
             return false;
         }
-        borrowedbooks.add(new BorrowRecord(member, book));
+        borrowedBooks.add(new BorrowRecord(member, book));
         book.markAsBorrowed();
         System.out.println("Book is borrowed Successfully");
         return true;
 
 
     }
-    public Member findMemberByid(String memberid){
+    private Member findMemberById(String memberId){
         for(Member m :members){
-            if(m.getId().equals(memberid)){
+            if(m.getId().equals(memberId)){
                 return m;
             }
         }
         return null;
     }
 
-    public Book findBookByid(String bookid){
+    private Book findBookById(String bookId){
         for(Book b: books){
-            if(b.getId().equals(bookid)){
+            if(b.getId().equals(bookId)){
                 return b;
             }
         }
         return null;
     }
-    public int countBorrowedBookByMember(Member member){
+    private int countBorrowedBookByMember(Member member){
         int count = 0;
-        for(BorrowRecord br : borrowedbooks){
+        for(BorrowRecord br : borrowedBooks){
             if(br.getMember().getId().equals(member.getId())&& !br.getBook().isAvailable()){
              count++;
             }
         }
         return count;
     }
-    public boolean returnBook(String memberid,String bookid){
-        Member member= findMemberByid(memberid);
+    public boolean returnBook(String memberId,String bookId){
+        Member member= findMemberById(memberId);
         if(member==null){
             System.out.println("Member not found");
             return false;
         }
 
-        Book book=findBookByid(bookid);
+        Book book=findBookById(bookId);
         if(book==null){
             System.out.println("Book not found");
             return false;
         }
-        for(BorrowRecord br: borrowedbooks) {
-            if (br.getMember().getId().equals(memberid) && br.getBook().getId().equals(bookid) && !br.getBook().isAvailable()) {
+        for(BorrowRecord br: borrowedBooks) {
+            if (br.getMember().getId().equals(memberId) && br.getBook().getId().equals(bookId) && !br.getBook().isAvailable()) {
                 br.getBook().markAsReturned();
-                System.out.println("Book retruned Successfully");
+                System.out.println("Book returned Successfully");
                 return true;
             }
 
@@ -104,14 +104,14 @@ public class Library {
         System.out.println("No record of the book borrowed by this member");
         return false;
     }
-    public void listBook(){
+    public void listBooks(){
         for(Book b: books){
-            System.out.println(b.getId()+ '|' + b.getTitle() + "|" + b.getAuthor() + "|" + (b.isAvailable()? " Available" : "Borrowed" ));
+            System.out.println(b.getId()+ '|' + b.getTitle() + '|' + b.getAuthor() + '|' + (b.isAvailable()? "Available" : "Borrowed" ));
         }
     }
     public void listMembers(){
         for(Member m: members){
-            System.out.println(m.getId()+ '|' + m.getName() + "|" + m.getMembership().getTypeName() );
+            System.out.println(m.getId()+ '|' + m.getName() + '|' + m.getMembership().getTypeName() );
         }
     }
 }
