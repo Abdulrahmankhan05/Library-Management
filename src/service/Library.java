@@ -5,6 +5,7 @@ import model.Book;
 import model.BorrowRecord;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Library {
@@ -93,9 +94,13 @@ public class Library {
             System.out.println("Book not found");
             return false;
         }
-        for(BorrowRecord br: borrowedBooks) {
+        Iterator<BorrowRecord> it = borrowedBooks.iterator();
+        while(it.hasNext()) {
+            BorrowRecord br =it.next();
+
             if (br.getMember().getId().equals(memberId) && br.getBook().getId().equals(bookId) && !br.getBook().isAvailable()) {
                 br.getBook().markAsReturned();
+                it.remove();
                 System.out.println("Book returned Successfully");
                 return true;
             }
@@ -113,5 +118,16 @@ public class Library {
         for(Member m: members){
             System.out.println(m.getId()+ '|' + m.getName() + '|' + m.getMembership().getTypeName() );
         }
+    }
+    public void listBorowedRecord(){
+        if(borrowedBooks.isEmpty()){
+            System.out.println("No borrow records");
+        }
+        for(BorrowRecord br: borrowedBooks){
+            if(!br.getBook().isAvailable()){
+                System.out.println(br.getBook().getTitle() + "book is borrowed by" + br.getMember().getName());
+            }
+        }
+
     }
 }
