@@ -21,7 +21,9 @@ public class Main {
             System.out.println("5. List Books");
             System.out.println("6. List Members");
             System.out.println("7. Exit");
+            System.out.println("8. List Borrowed Records");
             System.out.println("Choice:");
+
             int choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice){
@@ -76,6 +78,10 @@ public class Main {
                 }
                 case 7 : {
                     running = false;
+                    break;
+                }
+                case 8: {
+                    library.listBorowedRecord();
                     break;
                 }
                 default: System.out.println("Invalid choice");

@@ -125,7 +125,7 @@ public class Library {
         }
         for(BorrowRecord br: borrowedBooks){
             if(!br.getBook().isAvailable()){
-                System.out.println(br.getBook().getTitle() + "book is borrowed by" + br.getMember().getName());
+                System.out.println(br.getBook().getTitle() + "book is borrowed by " + br.getMember().getName() +"(" + br.getMember().getId() + ")");
             }
         }
 
