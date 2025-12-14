@@ -119,7 +119,7 @@ public class Library {
             System.out.println(m.getId()+ '|' + m.getName() + '|' + m.getMembership().getTypeName() );
         }
     }
-    public void listBorowedRecord(){
+    public void listBorrowedRecord(){
         if(borrowedBooks.isEmpty()){
             System.out.println("No borrow records");
         }
@@ -130,4 +130,24 @@ public class Library {
         }
 
     }
+    public void searchBookByKeyword(String keyword){
+        String key = keyword.toLowerCase();
+        boolean found = false;
+        for(Book book:books){
+            if(book.getAuthor().toLowerCase().contains(key) || book.getTitle().toLowerCase().contains(key) ){
+
+                System.out.println("Title: "+book.getTitle());
+                System.out.println("Author: "+book.getAuthor());
+                System.out.println("Book Id: "+book.getId());
+                System.out.println("Status :"+(book.isAvailable() ? " Available": "Borrowed"));
+                System.out.println("------------------------");
+
+
+                 found=true;
+            }
+        }
+        if(!found){
+            System.out.println("The book is not found");
+        }
+   }
 }

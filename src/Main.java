@@ -14,6 +14,7 @@ public class Main {
 
         while(running){
             System.out.println("Library System");
+            System.out.println("----------------------");
             System.out.println("1. Add Book");
             System.out.println("2. Register Member");
             System.out.println("3. Borrow Book");
@@ -22,9 +23,13 @@ public class Main {
             System.out.println("6. List Members");
             System.out.println("7. Exit");
             System.out.println("8. List Borrowed Records");
+            System.out.println("9. Search Book");
+            System.out.println("------------------------");
             System.out.println("Choice:");
 
+
             int choice = Integer.parseInt(scanner.nextLine());
+            System.out.println("------------------------");
 
             switch (choice){
                 case 1:{
@@ -81,8 +86,15 @@ public class Main {
                     break;
                 }
                 case 8: {
-                    library.listBorowedRecord();
+                    library.listBorrowedRecord();
                     break;
+                }
+                case 9: {
+                    System.out.println("Enter a keyword related to the book(Title/Author):");
+                    String key =scanner.nextLine();
+                    library.searchBookByKeyword(key);
+                    break;
+
                 }
                 default: System.out.println("Invalid choice");
             }
