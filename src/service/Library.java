@@ -110,6 +110,9 @@ public class Library {
         return false;
     }
     public void listBooks(){
+        if(books.isEmpty()){
+            System.out.println("No book in the record");
+        }
         for(Book b: books){
             System.out.println(b.getId()+ '|' + b.getTitle() + '|' + b.getAuthor() + '|' + (b.isAvailable()? "Available" : "Borrowed" ));
         }
@@ -149,5 +152,23 @@ public class Library {
         if(!found){
             System.out.println("The book is not found");
         }
+   }
+   public void deleteBook(String bookId){
+        Iterator <Book>it =books.iterator();
+        while(it.hasNext()){
+
+            Book book=it.next();
+            if(book.getId().equals(bookId)){
+                if(!book.isAvailable()){
+                    System.out.println("Cannot delete book: it is currently borrowed");
+                    return;
+                }
+                it.remove();
+                System.out.println("Book deleted successfully");
+                return;
+            }
+
+        }
+            System.out.println("Book is not found");
    }
 }

@@ -13,6 +13,7 @@ public class Main {
         boolean running = true;
 
         while(running){
+            System.out.println("----------------------");
             System.out.println("Library System");
             System.out.println("----------------------");
             System.out.println("1. Add Book");
@@ -24,6 +25,7 @@ public class Main {
             System.out.println("7. Exit");
             System.out.println("8. List Borrowed Records");
             System.out.println("9. Search Book");
+            System.out.println("10. Delete Book");
             System.out.println("------------------------");
             System.out.println("Choice:");
 
@@ -93,6 +95,13 @@ public class Main {
                     System.out.println("Enter a keyword related to the book(Title/Author):");
                     String key =scanner.nextLine();
                     library.searchBookByKeyword(key);
+                    break;
+
+                }
+                case 10:{
+                    System.out.println("Enter the book Id to delete:" );
+                    String bookId = scanner.nextLine();
+                    library.deleteBook(bookId);
                     break;
 
                 }
