@@ -1,9 +1,9 @@
 package model;
 
 public class Book {
-    private String id;
-    private String title;
-    private String author;
+    private final String id;
+    private final String title;
+    private final String author;
     private Boolean availability;
 
     public Book(String id, String title, String author){

@@ -1,6 +1,7 @@
 import model.*;
 import service.Library;
 
+import java.util.List;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -33,31 +34,36 @@ public class Main {
             int choice = Integer.parseInt(scanner.nextLine());
             System.out.println("------------------------");
 
-            switch (choice){
-                case 1:{
+            switch (choice) {
+                case 1: {
                     System.out.print("Book ID: ");
-                    String id = scanner.nextLine();
+                    String id = scanner.nextLine().trim();
                     System.out.print("Title: ");
-                    String title = scanner.nextLine();
+                    String title = scanner.nextLine().trim();
                     System.out.print("Author: ");
-                    String author = scanner.nextLine();
-                    library.addBook(new Book(id, title, author));
+                    String author = scanner.nextLine().trim();
+                    boolean status = library.addBook(id, title, author);
+                    if (status) {
+                        System.out.println("Book added successfully");
+                    } else {
+                        System.out.println("Cannot this book. A book with same id may exist in the library ");
+                    }
                     break;
                 }
 
-                case 2:{
+                case 2: {
                     System.out.print("Member ID: ");
                     String id = scanner.nextLine();
                     System.out.print("Name: ");
                     String name = scanner.nextLine();
                     System.out.print("Membership type (BASIC/PREMIUM): ");
                     String type = scanner.nextLine().trim().toUpperCase();
-                    Membership membership= type.equals("PREMIUM")? new PremiumMembership(): new BasicMembership();
+                    Membership membership = type.equals("PREMIUM") ? new PremiumMembership() : new BasicMembership();
                     library.addMember(new Member(id, name, membership));
                     break;
 
                 }
-                case 3:{
+                case 3: {
                     System.out.print("Member ID: ");
                     String memberId = scanner.nextLine();
                     System.out.print("Book ID: ");
@@ -66,7 +72,7 @@ public class Main {
                     break;
 
                 }
-                case 4:{
+                case 4: {
                     System.out.print("Member ID: ");
                     String memberId = scanner.nextLine();
                     System.out.print("Book ID: ");
@@ -76,8 +82,17 @@ public class Main {
 
                 }
                 case 5: {
-                    library.listBooks();
-                    break;
+                    List<Book> books = library.listBooks();
+                    if (books.isEmpty()) {
+                        System.out.println("No book in the record");
+                        break;
+                    }
+                    for (Book b : books) {
+                        System.out.println(b.getId() + '|' + b.getTitle() + '|' + b.getAuthor() + '|' + (b.isAvailable() ? "Available" : "Borrowed"));
+                    }
+
+                break;
+
                 }
                 case 6: {
                     library.listMembers();
@@ -100,8 +115,14 @@ public class Main {
                 }
                 case 10:{
                     System.out.println("Enter the book Id to delete:" );
-                    String bookId = scanner.nextLine();
-                    library.deleteBook(bookId);
+                    String bookId = scanner.nextLine().trim();
+                    boolean status =library.deleteBook(bookId);
+                    if(status){
+                        System.out.println("Book is deleted successfully.");
+                    }
+                    else{
+                        System.out.println("Cannot delete book. It may not exist or is currently borrowed.");
+                    }
                     break;
 
                 }
