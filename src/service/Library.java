@@ -3,7 +3,10 @@ package service;
 import model.Member;
 import model.Book;
 import model.BorrowRecord;
+
+import model.Membership;
 import repository.BookRepository;
+import repository.MemberRepository;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,13 +14,13 @@ import java.util.List;
 
 public class Library {
     private final BookRepository bookRepository = new BookRepository();
+    private final MemberRepository memberRepository = new MemberRepository();
 
-    private final List<Member> members;
+
 
     private final List<BorrowRecord> borrowedBooks;
 
     public Library(){
-        this.members=new ArrayList<>();
         this.borrowedBooks= new ArrayList<>();
 
     }
@@ -26,17 +29,21 @@ public class Library {
         if (bookRepository.findBookById(id) != null) {
             return false;
         }
-        Book book = new Book(id, title, author);
-        bookRepository.addBook(book);
+        bookRepository.addBook(new Book(id, title, author));
         return true;
 
     }
 
-    public void addMember(Member member){
-        members.add(member);
+    public boolean addMember(String id , String name, Membership membership){
+        if (memberRepository.findMemberById(id) != null) {
+            return false;
+        }
+        memberRepository.addMember(new Member(id, name, membership));
+        return true;
     }
+
     public boolean borrowBook(String memberId,String bookId){
-        Member member= findMemberById(memberId);
+        Member member= memberRepository.findMemberById(memberId);
         if(member==null){
             System.out.println("Member not found");
             return false;
@@ -64,14 +71,7 @@ public class Library {
 
 
     }
-    private Member findMemberById(String memberId){
-        for(Member m :members){
-            if(m.getId().equals(memberId)){
-                return m;
-            }
-        }
-        return null;
-    }
+
 
 
     private int countBorrowedBookByMember(Member member){
@@ -84,7 +84,7 @@ public class Library {
         return count;
     }
     public boolean returnBook(String memberId,String bookId){
-        Member member= findMemberById(memberId);
+        Member member= memberRepository.findMemberById(memberId);
         if(member==null){
             System.out.println("Member not found");
             return false;
@@ -113,10 +113,9 @@ public class Library {
     public List<Book> listBooks(){
         return bookRepository.findAll();
     }
-    public void listMembers(){
-        for(Member m: members){
-            System.out.println(m.getId()+ '|' + m.getName() + '|' + m.getMembership().getTypeName() );
-        }
+
+    public List<Member> listMembers(){
+        return memberRepository.findAll();
     }
     public void listBorrowedRecord(){
         if(borrowedBooks.isEmpty()){
@@ -129,25 +128,20 @@ public class Library {
         }
 
     }
-    public void searchBookByKeyword(String keyword){
+    public List<Book> searchBookByKeyword(String keyword){
         String key = keyword.toLowerCase();
+        List<Book> books = new ArrayList<>();
         boolean found = false;
         for(Book book:bookRepository.findAll()){
             if(book.getAuthor().toLowerCase().contains(key) || book.getTitle().toLowerCase().contains(key) ){
-
-                System.out.println("Title: "+book.getTitle());
-                System.out.println("Author: "+book.getAuthor());
-                System.out.println("Book Id: "+book.getId());
-                System.out.println("Status :"+(book.isAvailable() ? " Available": "Borrowed"));
-                System.out.println("------------------------");
-
-
-                 found=true;
+                books.add(book);
+                found=true;
             }
         }
         if(!found){
-            System.out.println("The book is not found");
+            return null;
         }
+        return books;
    }
    public boolean deleteBook(String id){
         return bookRepository.removeIfAvailable(id);

@@ -46,7 +46,7 @@ public class Main {
                     if (status) {
                         System.out.println("Book added successfully");
                     } else {
-                        System.out.println("Cannot this book. A book with same id may exist in the library ");
+                        System.out.println("Cannot add this book. A book with same id may exist in the library ");
                     }
                     break;
                 }
@@ -59,7 +59,13 @@ public class Main {
                     System.out.print("Membership type (BASIC/PREMIUM): ");
                     String type = scanner.nextLine().trim().toUpperCase();
                     Membership membership = type.equals("PREMIUM") ? new PremiumMembership() : new BasicMembership();
-                    library.addMember(new Member(id, name, membership));
+                    boolean status= library.addMember(id, name, membership);
+                    if (status) {
+                        System.out.println("Member registered successfully");
+                    } else {
+                        System.out.println("Cannot register this member. This member is already registered or use different ID. ");
+                    }
+
                     break;
 
                 }
@@ -95,7 +101,11 @@ public class Main {
 
                 }
                 case 6: {
-                    library.listMembers();
+                    List<Member> members =library.listMembers();
+                    for(Member member:members){
+                        System.out.println(member.getId()+ '|' + member.getName() + '|' + member.getMembership().getTypeName() );
+
+                    }
                     break;
                 }
                 case 7 : {
@@ -109,7 +119,20 @@ public class Main {
                 case 9: {
                     System.out.println("Enter a keyword related to the book(Title/Author):");
                     String key =scanner.nextLine();
-                    library.searchBookByKeyword(key);
+                    List<Book> books= library.searchBookByKeyword(key);
+                    if(books==null){
+                        System.out.println("No book found with this key word");
+                        break ;
+                    }
+                for(Book book: books) {
+
+                    System.out.println("Title: " + book.getTitle());
+                    System.out.println("Author: " + book.getAuthor());
+                    System.out.println("Book Id: " + book.getId());
+                    System.out.println("Status :" + (book.isAvailable() ? " Available" : "Borrowed"));
+                    System.out.println("------------------------");
+                }
+
                     break;
 
                 }
