@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class BorrowedBookRepository {
+public class BorrowBookRepository {
     private final List<BorrowRecord> borrowedBooks =new ArrayList<>();
 
     public void add(Member member, Book book){

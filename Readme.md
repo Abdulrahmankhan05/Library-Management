@@ -5,34 +5,57 @@ Library Management System
 
 ## Description
 
-A basic Java project that manages library operations.
-Current functionality includes handling membership information.
-Features (only list what actually exists)
+A Java project that manages library operations such as borrowing and returning books. 
+This project demonstrates the separation of the responsibilities across service, model, and repository layers.
 
-Add and store membership details
+The main goal is to practice clean code structure and design principles without using external frameworks.
+## Features
 
+- Add and store member details
+- Add and store book details
+- Borrow books with membership-based rules
+- Return borrowed books
+- List books, members, and borrowed records
+- Delete book when eligible
 
 
 ## Tech Stack
 
-Java
+- Java(core)
+
+- No external framework(CLI-based)
 
 ## Project Structure
 ```
 src/
 ├─ Main.java
 └─ model/
-└─ Membership.java
+    ├─BasicMembership.java
+    ├─Book.java
+    ├─BorrowRecord.java
+    ├─Member.java
+    ├─Membership.java
+    └─PremiumMembership.java 
+└─repository/
+    ├─BookRepository.java
+    ├─BorrowRecordRepository.java
+    └─MemberRepository.java
+└─ service/
+    ├─BorrowResult.java
+    ├─Library.java
+    └─ReturnResult.java
+    
 ```
 
 ## Current Progress
 
-Membership base abstraction implemented
+- Core library operations are fully implemented using a layered architecture
+- Repository layer manages data storage for books, members, and borrow records
+- Service layer enforces business rules such as borrow limits and availability checks
+- Borrow and return operations use enum-based result handling instead of boolean flags
+- Console-based UI is functional and separated from core logic
 
 ## Future Work
 
-Book management
-
-Borrow/return functionality
-
-Database integration
+- Add persistent storage using files or a database
+- Expose the system as a REST API using a web framework

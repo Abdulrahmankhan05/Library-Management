@@ -6,19 +6,18 @@ import model.BorrowRecord;
 
 import model.Membership;
 import repository.BookRepository;
-import repository.BorrowedBookRepository;
+import repository.BorrowBookRepository;
 import repository.MemberRepository;
 
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Library {
 
     private final BookRepository bookRepository = new BookRepository();
     private final MemberRepository memberRepository = new MemberRepository();
-    private final BorrowedBookRepository borrowedBookRepository=new BorrowedBookRepository();
+    private final BorrowBookRepository borrowBookRepository =new BorrowBookRepository();
 
 
     public boolean addBook(String id, String title, String author) {
@@ -59,7 +58,7 @@ public class Library {
         if(currentBorrowedBook>=limit){
             return BorrowResult.BORROW_LIMIT_REACHED;
         }
-        borrowedBookRepository.add(member, book);
+        borrowBookRepository.add(member, book);
         book.markAsBorrowed();
         return BorrowResult.SUCCESS;
     }
@@ -68,7 +67,7 @@ public class Library {
 
     private int countBorrowedBookByMember(Member member){
         int count = 0;
-        for(BorrowRecord br : borrowedBookRepository.findAll()){
+        for(BorrowRecord br : borrowBookRepository.findAll()){
             if(br.getMember().getId().equals(member.getId())&& !br.getBook().isAvailable()){
              count++;
             }
@@ -85,7 +84,7 @@ public class Library {
         if(book==null){
             return ReturnResult.BOOK_NOT_FOUND;
         }
-        boolean status = borrowedBookRepository.remove(memberId,bookId);
+        boolean status = borrowBookRepository.remove(memberId,bookId);
 
         if (!status){
             return ReturnResult.NO_RECORD_FOUND;
@@ -102,7 +101,7 @@ public class Library {
         return memberRepository.findAll();
     }
     public List<BorrowRecord> listBorrowedRecord(){
-        return borrowedBookRepository.findAll();
+        return borrowBookRepository.findAll();
 
     }
     public List<Book> searchBookByKeyword(String keyword){
@@ -126,4 +125,3 @@ public class Library {
 
 
 }
-1
