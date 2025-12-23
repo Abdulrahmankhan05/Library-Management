@@ -85,17 +85,14 @@ public class Library {
         if(book==null){
             return ReturnResult.BOOK_NOT_FOUND;
         }
-        Iterator<BorrowRecord> it = borrowedBookRepository.findAll().iterator();
-        while(it.hasNext()) {
-            BorrowRecord br =it.next();
+        boolean status = borrowedBookRepository.remove(memberId,bookId);
 
-            if (br.getMember().getId().equals(memberId) && br.getBook().getId().equals(bookId) && !br.getBook().isAvailable()) {
-                br.getBook().markAsReturned();
-                it.remove();
-                return ReturnResult.SUCCESS;
+        if (!status){
+            return ReturnResult.NO_RECORD_FOUND;
             }
-        }
-        return ReturnResult.NO_RECORD_FOUND;
+
+        book.markAsReturned();
+        return ReturnResult.SUCCESS;
     }
     public List<Book> listBooks(){
         return bookRepository.findAll();
@@ -129,3 +126,4 @@ public class Library {
 
 
 }
+1
