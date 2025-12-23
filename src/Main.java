@@ -1,5 +1,8 @@
 import model.*;
+
+import service.BorrowResult;
 import service.Library;
+import service.ReturnResult;
 
 import java.util.List;
 import java.util.Scanner;
@@ -74,7 +77,14 @@ public class Main {
                     String memberId = scanner.nextLine();
                     System.out.print("Book ID: ");
                     String bookId = scanner.nextLine();
-                    library.borrowBook(memberId, bookId);
+                    BorrowResult result= library.borrowBook(memberId, bookId);
+                    switch (result){
+                        case BorrowResult.MEMBER_NOT_FOUND -> System.out.println("Member not found. Type valid member id.");
+                        case BorrowResult.BOOK_NOT_FOUND -> System.out.println("Book not found. Type valid book id.");
+                        case BorrowResult.BOOK_ALREADY_BORROWED ->  System.out.println("Book is already borrowed");
+                        case BorrowResult.BORROW_LIMIT_REACHED -> System.out.println(" This Member reached the limit of borrowing");
+                        case BorrowResult.SUCCESS -> System.out.println("Book is borrowed Successfully");
+                    }
                     break;
 
                 }
@@ -83,7 +93,13 @@ public class Main {
                     String memberId = scanner.nextLine();
                     System.out.print("Book ID: ");
                     String bookId = scanner.nextLine();
-                    library.returnBook(memberId, bookId);
+                    ReturnResult result=library.returnBook(memberId, bookId);
+                    switch (result){
+                        case ReturnResult.MEMBER_NOT_FOUND -> System.out.println("Member not found. Type valid member id.");
+                        case ReturnResult.BOOK_NOT_FOUND -> System.out.println("Book not found. Type valid book id.");
+                        case ReturnResult.NO_RECORD_FOUND -> System.out.println("No record found");
+                        case ReturnResult.SUCCESS -> System.out.println("Book returned Successfully");
+                    }
                     break;
 
                 }

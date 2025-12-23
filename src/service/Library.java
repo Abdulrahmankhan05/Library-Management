@@ -6,7 +6,9 @@ import model.BorrowRecord;
 
 import model.Membership;
 import repository.BookRepository;
+import repository.BorrowedBookRepository;
 import repository.MemberRepository;
+
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,13 +17,13 @@ import java.util.List;
 public class Library {
     private final BookRepository bookRepository = new BookRepository();
     private final MemberRepository memberRepository = new MemberRepository();
+    private final BorrowedBookRepository borrowedBookRepository=new BorrowedBookRepository();
 
 
 
-    private final List<BorrowRecord> borrowedBooks;
+
 
     public Library(){
-        this.borrowedBooks= new ArrayList<>();
 
     }
 
@@ -42,58 +44,56 @@ public class Library {
         return true;
     }
 
-    public boolean borrowBook(String memberId,String bookId){
+    public BorrowResult borrowBook(String memberId,String bookId){
         Member member= memberRepository.findMemberById(memberId);
         if(member==null){
-            System.out.println("Member not found");
-            return false;
+            return BorrowResult.MEMBER_NOT_FOUND;
         }
 
         Book book=bookRepository.findBookById(bookId);
         if(book==null){
-            System.out.println("Book not found");
-            return false;
+            return BorrowResult.BOOK_NOT_FOUND;
         }
+
         if (!book.isAvailable()) {
-            System.out.println("Book is already borrowed");
-            return false;
+            return BorrowResult.BOOK_ALREADY_BORROWED;
         }
+
         int currentBorrowedBook= countBorrowedBookByMember(member);
         int limit=member.getMembership().getBorrowLimit();
+
         if(currentBorrowedBook>=limit){
-            System.out.println(" This Member reached the limit of borrowing");
-            return false;
+            return BorrowResult.BORROW_LIMIT_REACHED;
         }
-        borrowedBooks.add(new BorrowRecord(member, book));
+        borrowedBookRepository.add(member, book);
         book.markAsBorrowed();
-        System.out.println("Book is borrowed Successfully");
-        return true;
+        return BorrowResult.SUCCESS;
     }
 
 
 
     private int countBorrowedBookByMember(Member member){
         int count = 0;
-        for(BorrowRecord br : borrowedBooks){
+        for(BorrowRecord br : borrowedBookRepository.findAll()){
             if(br.getMember().getId().equals(member.getId())&& !br.getBook().isAvailable()){
              count++;
             }
         }
         return count;
     }
-    public boolean returnBook(String memberId,String bookId){
+    public ReturnResult returnBook(String memberId,String bookId){
         Member member= memberRepository.findMemberById(memberId);
         if(member==null){
             System.out.println("Member not found");
-            return false;
+            return ReturnResult.MEMBER_NOT_FOUND;
         }
 
         Book book=bookRepository.findBookById(bookId);
         if(book==null){
             System.out.println("Book not found");
-            return false;
+            return ReturnResult.BOOK_NOT_FOUND;
         }
-        Iterator<BorrowRecord> it = borrowedBooks.iterator();
+        Iterator<BorrowRecord> it = borrowedBookRepository.findAll().iterator();
         while(it.hasNext()) {
             BorrowRecord br =it.next();
 
@@ -101,12 +101,12 @@ public class Library {
                 br.getBook().markAsReturned();
                 it.remove();
                 System.out.println("Book returned Successfully");
-                return true;
+                return ReturnResult.SUCCESS;
             }
 
         }
         System.out.println("No record of the book borrowed by this member");
-        return false;
+        return ReturnResult.NO_RECORD_FOUND;
     }
     public List<Book> listBooks(){
         return bookRepository.findAll();
@@ -116,10 +116,10 @@ public class Library {
         return memberRepository.findAll();
     }
     public void listBorrowedRecord(){
-        if(borrowedBooks.isEmpty()){
+        if(borrowedBookRepository.findAll().isEmpty()){
             System.out.println("No borrow records");
         }
-        for(BorrowRecord br: borrowedBooks){
+        for(BorrowRecord br: borrowedBookRepository.findAll()){
             if(!br.getBook().isAvailable()){
                 System.out.println(br.getBook().getTitle() + "book is borrowed by " + br.getMember().getName() +"(" + br.getMember().getId() + ")");
             }
