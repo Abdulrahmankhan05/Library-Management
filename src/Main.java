@@ -129,7 +129,15 @@ public class Main {
                     break;
                 }
                 case 8: {
-                    library.listBorrowedRecord();
+                    List<BorrowRecord> record= library.listBorrowedRecord();
+                    if(record.isEmpty()){
+                        System.out.println("No borrow records found");
+                    }
+                    for(BorrowRecord br:record){
+                        if(!br.getBook().isAvailable()){
+                            System.out.println(br.getBook().getTitle() + "book is borrowed by " + br.getMember().getName() +"(" + br.getMember().getId() + ")");
+                        }
+                    }
                     break;
                 }
                 case 9: {
